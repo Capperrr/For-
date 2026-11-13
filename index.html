@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For my wife WINTER</title>
+<style>
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  width: 100vw;
+  height: 100vh;
+  background: #090e1b;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+  color: #fff;
+  cursor: pointer;
+  transition: background 2s ease;
+}
+
+body.ending{
+  background: linear-gradient(180deg,#ffd9ec 0%,#b8e0ff 40%,#d4f5c2 100%);
+}
+
+.title-main{
+  position: fixed;
+  top: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  font-size: clamp(2rem, 7vw, 4rem);
+  font-weight: 700;
+  white-space: nowrap;
+  background: linear-gradient(90deg,#c9ddff,#e8d7f7,#ffd9e8,#c9ddff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite, breathe 3.5s ease-in-out infinite;
+  z-index: 10;
+  transition: top 1.5s ease, transform 1.5s ease;
+}
+
+.sub-title{
+  position: fixed;
+  top: 23%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.1rem;
+  color: #c0c8d8;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  z-index: 10;
+  transition: opacity 1.2s ease;
+}
+
+.text-box{
+  position: fixed;
+  top: 42%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86%;
+  text-align: center;
+  font-size: clamp(1rem, 2.6vw, 1.6rem);
+  color: #e6edff;
+  line-height: 1.6;
+  min-height: 2.4em;
+  z-index: 5;
+  transition: opacity 1s ease, top 1.5s ease;
+}
+
+.particle{
+  position: fixed;
+  pointer-events: none;
+  user-select: none;
+}
+
+.snow{
+  color: #ffffff;
+  animation: fallSnow 9s linear forwards;
+  opacity: 0.55;
+}
+
+.star{
+  color: #ffeebb;
+  animation: fallStar 11s linear forwards;
+  opacity: 0.45;
+}
+
+.pop{
+  animation: popUp 2.6s ease forwards;
+}
+
+/* 结尾插画 */
+.ending-scene{
+  position: fixed;
+  left: 50%;
+  bottom: -40px;
+  transform: translateX(-50%) scale(0.7);
+  width: min(760px, 94vw);
+  height: 460px;
+  opacity: 0;
+  transition: opacity 1.8s ease, transform 1.8s ease;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.ending-scene.show{
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.ending-sky{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 110px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.45), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(255,220,240,0.55), transparent 28%),
+    linear-gradient(180deg,#ffd9ec 0%,#b8e0ff 45%,#d4f5c2 100%);
+  border-radius: 30px 30px 0 0;
+  overflow: hidden;
+}
+
+.moon{
+  position: absolute;
+  top: 30px;
+  right: 60px;
+  width: 52px;
+  height: 52px;
+  background: #fff7c7;
+  border-radius: 50%;
+  box-shadow: 0 0 40px #fff3b0;
+  opacity: 0.9;
+}
+
+.cloud{
+  position: absolute;
+  background: rgba(255,255,255,0.75);
+  border-radius: 50px;
+  opacity: 0.6;
+}
+.cloud::before,
+.cloud::after{
+  content: "";
+  position: absolute;
+  background: rgba(255,255,255,0.75);
+  border-radius: 50%;
+}
+
+.cloud-1{
+  top: 50px;
+  left: 40px;
+  width: 90px;
+  height: 24px;
+}
+.cloud-1::before{
+  width: 34px; height: 34px; top: -18px; left: 14px;
+}
+.cloud-1::after{
+  width: 24px; height: 24px; top: -10px; left: 48px;
+}
+
+.cloud-2{
+  top: 90px;
+  right: 140px;
+  width: 70px;
+  height: 20px;
+  opacity: 0.45;
+}
+.cloud-2::before{
+  width: 28px; height: 28px; top: -14px; left: 10px;
+}
+.cloud-2::after{
+  width: 20px; height: 20px; top: -8px; left: 38px;
+}
+
+.balloon{
+  position: absolute;
+  font-size: 30px;
+  animation: floatBalloon 4s ease-in-out infinite;
+}
+.balloon-1{ left: 14%; top: 180px; animation-delay: 0s; }
+.balloon-2{ left: 80%; top: 140px; animation-delay: 1.3s; }
+.balloon-3{ left: 26%; top: 90px; animation-delay: 2.6s; }
+
+.butterfly{
+  position: absolute;
+  font-size: 22px;
+  animation: flutter 3s ease-in-out infinite;
+}
+.butterfly-1{ left: 44%; top: 200px; animation-delay: 0.4s; }
+.butterfly-2{ left: 66%; top: 240px; animation-delay: 1.8s; }
+
+.sparkle{
+  position: absolute;
+  color: #fff7c2;
+  font-size: 18px;
+  animation: twinkle 2s ease-in-out infinite;
+}
+.sparkle-1{ left: 30%; top: 130px; }
+.sparkle-2{ left: 72%; top: 90px; }
+.sparkle-3{ left: 54%; top: 160px; }
+.sparkle-4{ left: 88%; top: 210px; }
+
+.grass{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 110px;
+  background: linear-gradient(180deg,#9edf7a,#4ea54e);
+  border-radius: 30px 30px 0 0;
+}
+
+.flower{
+  position: absolute;
+  bottom: 70px;
+  font-size: 22px;
+}
+.flower-1{ left: 12%; }
+.flower-2{ left: 24%; }
+.flower-3{ left: 70%; }
+.flower-4{ left: 84%; }
+.flower-5{ left: 40%; bottom: 60px; font-size: 18px; }
+.flower-6{ left: 58%; bottom: 62px; font-size: 18px; }
+
+.grass-heart{
+  position: absolute;
+  bottom: 40px;
+  font-size: 20px;
+  animation: beat 1.4s ease-in-out infinite;
+}
+.grass-heart-1{ left: 20%; }
+.grass-heart-2{ left: 76%; animation-delay: 0.7s; }
+
+.couple{
+  position: absolute;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+}
+
+.person{
+  width: 110px;
+  height: 170px;
+  position: relative;
+}
+
+.head{
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.body{
+  width: 72px;
+  height: 110px;
+  border-radius: 36px 36px 26px 26px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.person-a .head{
+  background: #ffe1c7;
+}
+.person-a .body{
+  background: #ff7eb6;
+}
+
+.person-b .head{
+  background: #ffd7b5;
+}
+.person-b .body{
+  background: #ff9ec7;
+}
+
+.hands{
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  z-index: 3;
+}
+
+.arm-up{
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  width: 40px;
+  height: 10px;
+  background: #ffe1c7;
+  border-radius: 6px;
+  transform-origin: left center;
+  transform: rotate(-30deg);
+}
+
+.stars-near{
+  position: absolute;
+  font-size: 20px;
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+@keyframes shine{
+  0%{background-position: 0% 50%;}
+  100%{background-position: 300% 50%;}
+}
+
+@keyframes breathe{
+  0%,100%{filter: brightness(1);}
+  50%{filter: brightness(1.25);}
+}
+
+@keyframes fallSnow{
+  from{transform: translateY(-30px);}
+  to{transform: translateY(100vh); opacity: 0;}
+}
+
+@keyframes fallStar{
+  from{transform: translateY(-30px);}
+  to{transform: translateY(100vh); opacity: 0;}
+}
+
+@keyframes popUp{
+  0%{
+    transform: translateY(0) scale(0.6);
+    opacity: 0.9;
+  }
+  40%{
+    transform: translateY(-80px) scale(1.15);
+    opacity: 1;
+  }
+  100%{
+    transform: translateY(-180px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes floatBalloon{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-14px); }
+}
+
+@keyframes flutter{
+  0%,100%{ transform: rotate(-6deg); }
+  50%{ transform: rotate(8deg); }
+}
+
+@keyframes twinkle{
+  0%,100%{ opacity: 0.3; }
+  50%{ opacity: 1; }
+}
+
+@keyframes beat{
+  0%,100%{ transform: scale(1); }
+  50%{ transform: scale(1.18); }
+}
+</style>
+</head>
+<body>
+
+<div class="title-main">For my wife WINTER</div>
+<div class="sub-title">Thank you for appearing</div>
+<div class="text-box" id="txt"></div>
+
+<div class="ending-scene" id="endingScene">
+  <div class="ending-sky">
+    <div class="moon"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="balloon balloon-1">🎈</div>
+    <div class="balloon balloon-2">🎀</div>
+    <div class="balloon balloon-3">💝</div>
+    <div class="butterfly butterfly-1">🦋</div>
+    <div class="butterfly butterfly-2">🦋</div>
+    <div class="sparkle sparkle-1">✦</div>
+    <div class="sparkle sparkle-2">✧</div>
+    <div class="sparkle sparkle-3">✦</div>
+    <div class="sparkle sparkle-4">✧</div>
+  </div>
+  <div class="grass">
+    <div class="flower flower-1">🌸</div>
+    <div class="flower flower-2">🌼</div>
+    <div class="flower flower-3">🌷</div>
+    <div class="flower flower-4">🌹</div>
+    <div class="flower flower-5">🌼</div>
+    <div class="flower flower-6">🌸</div>
+    <div class="grass-heart grass-heart-1">❤</div>
+    <div class="grass-heart-2">❤</div>
+  </div>
+  <div class="couple">
+    <div class="person person-a">
+      <div class="head"></div>
+      <div class="body">Z</div>
+      <div class="arm-up"></div>
+      <div class="stars-near" style="top: -10px; left: 20px;">✦</div>
+      <div class="stars-near" style="top: 4px; left: 60px;">❤</div>
+    </div>
+    <div class="person person-b">
+      <div class="head"></div>
+      <div class="body">C</div>
+      <div class="stars-near" style="top: 0px; left: 50px;">❤</div>
+    </div>
+    <div class="hands">💍</div>
+  </div>
+</div>
+
+<script>
+const messageList = [
+  "In 2026, I met you when you were 24.",
+  "That year, I was 21.",
+  "Three numbers that seemed unrelated",
+  "turned into our most precious memories.",
+  "I never imagined I could love you this deeply.",
+  "Back then, I could never know",
+  "I would change your title from teacher to my wife.",
+  "I am quiet and not fond of parties.",
+  "You love life, quick-witted and flexible.",
+  "We are two such different people.",
+  "Through you, I learned what lovely truly means.",
+  "It is November, 2026.",
+  "Right now I am in the UK.",
+  "This clumsy way is how I show my love for you.",
+  "If you are reading this, please remember:",
+  "I love you. I miss you.",
+  "I want to hold you tight in my arms.",
+  "I wish you good health.",
+  "I hope you sleep well every night.",
+  "May you have fewer worries.",
+  "We have an 8-hour time difference.",
+  "I stay awake until you wake up.",
+  "Sometimes I feel bored.",
+  "Sometimes I just watch you quietly.",
+  "The moments when you sleep are ordinary yet special.",
+  "I want to remember every side of you.",
+  "Even if my memory fails me.",
+  "So I can only hold onto you, Wanting.",
+  "Remember your name, remember who you are.",
+  "As long as it is you, I will always love you."
+];
+
+const emojis = [
+  "❤", "💕", "💖", "💗", "💝",
+  "💜", "💙", "💚", "🧡",
+  "❄", "✨", "👑", "💍"
+];
+
+let currentIndex = 0;
+let typingLock = false;
+let endingStarted = false;
+
+const txtEl = document.getElementById("txt");
+const endingScene = document.getElementById("endingScene");
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function typeSentence(text){
+  typingLock = true;
+  txtEl.textContent = "";
+  for(let ch of text){
+    txtEl.textContent += ch;
+    await sleep(28);
+  }
+  typingLock = false;
+}
+
+function spawnBgParticle(){
+  const p = document.createElement("div");
+  if(Math.random() > 0.48){
+    p.className = "particle snow";
+    p.innerText = "❄";
+  }else{
+    p.className = "particle star";
+    p.innerText = "✦";
+  }
+  const size = 10 + Math.random() * 16;
+  p.style.fontSize = size + "px";
+  p.style.left = Math.random() * 100 + "%";
+  p.style.top = "-30px";
+  const time = 6 + Math.random() * 7;
+  p.style.animationDuration = time + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), time * 1000);
+}
+
+setInterval(spawnBgParticle, 650);
+
+function popEmoji(x, y){
+  const pop = document.createElement("div");
+  pop.className = "particle pop";
+  const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+  pop.innerText = emoji;
+  const size = 18 + Math.random() * 18;
+  pop.style.fontSize = size + "px";
+  pop.style.left = x + "px";
+  pop.style.top = y + "px";
+  document.body.appendChild(pop);
+  setTimeout(() => pop.remove(), 2600);
+}
+
+function bigFinaleBurst(){
+  const burstEmojis = ["❤","💕","💍","👑","✨","❄","💖"];
+  for(let i = 0; i < 40; i++){
+    setTimeout(()=>{
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      const pop = document.createElement("div");
+      pop.className = "particle pop";
+      pop.innerText = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+      pop.style.fontSize = (20 + Math.random() * 22) + "px";
+      pop.style.left = x + "px";
+      pop.style.top = y + "px";
+      document.body.appendChild(pop);
+      setTimeout(()=>pop.remove(), 2600);
+    }, i * 120);
+  }
+}
+
+document.addEventListener("click", (e)=>{
+  popEmoji(e.clientX, e.clientY);
+  if(typingLock) return;
+
+  if(currentIndex < messageList.length){
+    typeSentence(messageList[currentIndex]);
+    currentIndex++;
+  }
+
+  if(currentIndex >= messageList.length && !endingStarted){
+    endingStarted = true;
+    document.body.classList.add("ending");
+    setTimeout(()=>{
+      txtEl.style.opacity = "0";
+      document.querySelector(".sub-title").style.opacity = "0";
+    }, 600);
+    setTimeout(()=>{
+      endingScene.classList.add("show");
+      bigFinaleBurst();
+    }, 1400);
+  }
+});
+</script>
+
+</body>
+</html>
